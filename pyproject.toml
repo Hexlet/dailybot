@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "slack-bot"
+version = "0.1.0"
+description = ""
+authors = ["emp7yhead <artyomkropp@gmail.com>"]
+readme = "README.md"
+packages = [{include = "slack_bot"}]
+
+[tool.poetry.dependencies]
+python = "^3.8.1"
+slack-bolt = "^1.16.1"
+python-dotenv = "^0.21.0"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^6.0.0"
+black = {version = "^23.1a1", allow-prereleases = true}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
