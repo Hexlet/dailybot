@@ -1,5 +1,7 @@
-from dialog.questions import REPORT_TEMPLATE
+from dialog.questions import REPORT_TEMPLATE, BLOCKER_BLOCK
 from copy import deepcopy
+
+BLOCKERS_STOP_WORDS = ['no', 'none', '-', 'нет']
 
 
 def format_submission(text):
@@ -20,5 +22,7 @@ def fill_report(greet_msg, yesterday_progress, today_plans, blockers):
     report["blocks"][0]['text']['text'] = greet_msg
     report['blocks'][1]['text']['text'] += format_submission(yesterday_progress)
     report['blocks'][2]['text']['text'] += format_submission(today_plans)
-    report['blocks'][3]['text']['text'] += format_submission(blockers)
+    if blockers not in BLOCKERS_STOP_WORDS:
+        report['blocks'].append(BLOCKER_BLOCK)
+        report['blocks'][3]['text']['text'] += format_submission(blockers)
     return report

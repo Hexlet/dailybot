@@ -10,9 +10,10 @@ load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 
-token = os.environ.get("SLACK_BOT_TOKEN")
+bot_token = os.environ.get("SLACK_BOT_TOKEN")
+app_token = os.environ["SLACK_APP_TOKEN"]
 
-app = App(token=token)
+app = App(token=bot_token)
 
 
 @app.message('hello')
@@ -29,7 +30,7 @@ def say_hello(ack, say, message):
 
 
 @app.command('/report')
-def daily_report(body, ack, respond, client):
+def daily_report(body, ack, client):
     ack()
     client.views_open(
         trigger_id=body["trigger_id"],
@@ -94,10 +95,10 @@ def daily_report(body, ack, respond, client):
 
 
 @app.view("view-id")
-def view_submission(ack, body, say, view):
+def view_submission(ack, body, say, view, context):
     ack()
     logging.info(body)
-
+    logging.info(context.channel_id)
     username = get_username(body)
     greet_msg = f"<@{username}> posted daily update"
     yesterday_progress = get_report_details(view, 'progress')
@@ -109,4 +110,4 @@ def view_submission(ack, body, say, view):
 
 
 if __name__ == "__main__":
-    SocketModeHandler(app, os.environ["SLACK_APP_TOKEN"]).start()
+    SocketModeHandler(app, app_token).start()

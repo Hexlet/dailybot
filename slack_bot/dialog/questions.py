@@ -47,6 +47,14 @@ BLOCKERS = {
     ]
 }
 
+BLOCKER_BLOCK = {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": ">*Blockers*\n"
+            }
+        }
+
 REPORT_TEMPLATE = {
     "blocks": [
         {
@@ -70,11 +78,29 @@ REPORT_TEMPLATE = {
                 "text": ">*Today plans*\n"
             }
         },
+    ]
+}
+
+
+EDIT_BUTTON = {
+    "blocks": [
+        {
+            "type": "divider"
+        },
         {
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": ">*Blockers*\n"
+                "text": "Thanks for submission. If you forgot something, you can edit your report."
+            },
+            "accessory": {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Edit report"
+                },
+                "value": "edit-report",
+                "action_id": "edit-action"
             }
         }
     ]
