@@ -1,28 +1,40 @@
-from dialog.questions import REPORT_TEMPLATE, BLOCKER_BLOCK
+from dialog.temp_blocks import BLOCKERS, PLANS, PROGRESS, OVERALL
 from copy import deepcopy
 
-BLOCKERS_STOP_WORDS = ['no', 'none', '-', 'нет']
+
+def format_submission(submission):
+    raw_text = submission.split('\n')
+    return ''.join([f'\n>{string}' for string in raw_text])
 
 
-def format_submission(text):
-    raw_text = text.split('\n')
-    return '\n'.join([f'>{string}' for string in raw_text])
+def format_template(template, user, type):
+    ready_template = deepcopy(template)
+    match type:
+        case 'overall':
+            greet_msg = f"<@{user.username}> posted daily update"
+            ready_template['text']['text'] = greet_msg
+        case 'progress':
+            ready_template['text']['text'] += format_submission(user.progress)
+        case 'plans':
+            ready_template['text']['text'] += format_submission(user.plans)
+        case 'blockers':
+            ready_template['text']['text'] += format_submission(user.blockers)
+    return ready_template
 
 
-def get_username(body):
-    return body['user']['username']
+def make_report(user):
+    report = {'blocks': []}
 
+    overall = format_template(OVERALL, user, 'overall')
+    report['blocks'].append(overall)
 
-def get_report_details(view, stat):
-    return view['state']['values'][f'{stat}'][f'{stat}_input-action']['value']
+    progress = format_template(PROGRESS, user, 'progress')
+    report['blocks'].append(progress)
 
+    plans = format_template(PLANS, user, 'plans')
+    report['blocks'].append(plans)
 
-def fill_report(greet_msg, yesterday_progress, today_plans, blockers):
-    report = deepcopy(REPORT_TEMPLATE)
-    report["blocks"][0]['text']['text'] = greet_msg
-    report['blocks'][1]['text']['text'] += format_submission(yesterday_progress)
-    report['blocks'][2]['text']['text'] += format_submission(today_plans)
-    if blockers not in BLOCKERS_STOP_WORDS:
-        report['blocks'].append(BLOCKER_BLOCK)
-        report['blocks'][3]['text']['text'] += format_submission(blockers)
+    if user.blockers:
+        blockers = format_template(BLOCKERS, user, 'blockers')
+        report['blocks'].append(blockers)
     return report
