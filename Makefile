@@ -1,5 +1,8 @@
-install:
+install: .env
 	poetry install
+
+.env:
+	test ! -f .env && cp .env.example .env
 
 start:
 	poetry run python3 slack_bot/app.py
