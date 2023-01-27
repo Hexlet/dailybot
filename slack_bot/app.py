@@ -22,11 +22,9 @@ app = App(token=bot_token)
 @app.event('message')
 def handle_message(ack, say, message):
     ack()
-    logging.info(message)
     user_id = message['user']
     user_message_ts = message['ts']
     current_user = storage.get(user_id, None)
-    logging.info(current_user.report_ts)
     message_content = message['text']
     if current_user and current_user.latest_part != 'full report':
 
@@ -44,7 +42,7 @@ def handle_message(ack, say, message):
 
             elif latest == 'full report':
                 report = make_report(current_user)
-                logging.info(report)
+                logging.info(f'{current_user.username} send report: ', report)
                 response = say(text=report, channel='C04FEM741BR')
                 say(text=EDIT_BUTTON)
                 current_user.save_ts(response['ts'], 'question')
