@@ -1,5 +1,7 @@
 STOP_WORDS = ['no', 'none', '-', 'нет']
 
+storage = {}
+
 
 class User:
     username = None

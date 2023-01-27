@@ -1,1 +1,1 @@
-## slack-bot
+## hexlet-dailybot

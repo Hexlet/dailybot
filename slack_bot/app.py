@@ -6,8 +6,7 @@ from dotenv import load_dotenv
 
 from dialog.interactive import MODAL, EDIT_BUTTON
 from utils import make_report
-from storage import storage
-from user_controller import User
+from user_controller import User, storage
 
 load_dotenv()
 
