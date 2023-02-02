@@ -67,9 +67,9 @@ body:
       label: "OS"
       description: What is the impacted environment ?
       multiple: true
-    options:
-      - Windows
-      - Linux
-      - Mac
+      options:
+        - Windows
+        - Linux
+        - Mac
     validations:
       required: false
