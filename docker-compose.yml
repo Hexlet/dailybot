@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15.1-alpine
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=slack_bot
+    volumes:
+      - db:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+    restart: always
+
+  bot:
+    build: .
+    volumes:
+      - ./slack_bot:/app
+    environment:
+      - .env
+    depends_on:
+      - db
+    command: make start
+
+volumes:
+  db:
+    driver: local
