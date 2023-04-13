@@ -1,10 +1,10 @@
 .DEFAULT_GOAL = help
 
 install: env  ## Install dependencies with poetry
-	poetry install
+	poetry install --extras psycopg2-binary
 
 env:  ## Create or copy example as .env
-	test ! -f .env && cp .env.example .env
+	test ! -f .env && cp .env.example .env || true
 
 start:  ## Run bot
 	poetry run python3 slack_bot/app.py
