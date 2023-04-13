@@ -3,6 +3,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+CHANNEL_TO_REPORT = 'C051H1BCZ7U'
+BOT_ID = 'D051NFYNXD5'
+
 
 def get_bot_token():
     bot_token = os.getenv("SLACK_BOT_TOKEN", None)
@@ -29,6 +32,8 @@ def get_db_uri():
 
 def get_config():
     return {
+        'channel': CHANNEL_TO_REPORT,
+        'bot_id': BOT_ID,
         'app_token': get_app_token(),
         'bot_token': get_bot_token(),
         'SQLALCHEMY_DATABASE_URI': get_db_uri(),
