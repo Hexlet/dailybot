@@ -15,16 +15,15 @@ logging.basicConfig(level=logging.INFO)
 app = App(token=config['bot_token'])
 
 
-@app.message('test')
-def handle_test_message(ack, say):
-    ack()
-    say(text='Ok. This is test.')
+def check_command(command, respond, next):
+    if command['channel_id'] == config['bot_id']:
+        next()
 
 
-@app.command('/report')
+@app.command('/report', middleware=[check_command])
 def handle_report_command(ack, command, say):
     ack()
-
+    logging.info(command)
     user_id = command['user_id']
     logging.info(f'{user_id} initiated report command')
     username = command['user_name']
@@ -36,6 +35,12 @@ def handle_report_command(ack, command, say):
         user_id, message_ts
     )
     logging.info(f'Created new report: {report}')
+
+
+@app.command('/report')
+def handle_report_command_in_chat(ack, respond):
+    ack()
+    respond('Please command me in PM')
 
 
 @app.event('message')
@@ -60,18 +65,24 @@ def handle_message(ack, say, message):
                 current_report, response['ts'], 'question'
             )
 
-    if current_report.is_completed():
+    if current_report.is_completed() and current_report.message_timestamp != current_report.report_timestamp:
         report_info = user_reports.get_latest_report(user_id).info
         logging.info(report_info)
         report = messages.make_report(current_report)
         logging.info(f'{user_id} succesfully send report')
-        response = say(text=report, channel='C051H1BCZ7U')
+        response = say(text=report, channel=config['channel'])
         user_reports.update_timestamp(
             current_report, response['ts'], 'question'
         )
         user_reports.update_timestamp(
             current_report, response['ts'], 'report'
         )
+
+
+@app.message('test')
+def handle_test_message(ack, say):
+    ack()
+    say(text='Ok. This is test.')
 
 
 @app.action('edit-action')
@@ -88,8 +99,9 @@ def call_edit_modal(ack, client, body):
 
 
 @app.view("view-id")
-def edit_report(ack, body, say, view, response):
+def edit_report(ack, body, say, view, client):
     ack()
+    logging.info(body)
 
 
 if __name__ == "__main__":
