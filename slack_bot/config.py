@@ -25,7 +25,7 @@ def get_db_uri():
     user = os.getenv('PG_USER', default='postgres')
     password = os.getenv('PG_PASS', default='password')
     host = os.getenv('PG_HOST', default='localhost')
-    port = os.getenv('PG_POST', default=5432)
+    port = os.getenv('PG_PORT', default=5432)
     db = os.getenv('PG_DB', default='')
     return f'postgresql://{user}:{password}@{host}:{port}/{db}'
 
