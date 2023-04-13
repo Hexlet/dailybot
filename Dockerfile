@@ -27,4 +27,4 @@ COPY poetry.lock pyproject.toml /app/
 
 COPY . /app/
 
-RUN poetry install
+RUN poetry install --extras psycopg2-binary
