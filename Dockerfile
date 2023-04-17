@@ -21,10 +21,10 @@ RUN apt-get update && apt-get upgrade -y \
     && curl -sSL 'https://install.python-poetry.org' | python - \
     && poetry --version
 
-WORKDIR /code
+WORKDIR /app
 
-COPY poetry.lock pyproject.toml /code/
+COPY poetry.lock pyproject.toml /app/
 
-COPY . /code/
+COPY . /app/
 
-RUN poetry install
+RUN poetry install --extras psycopg2-binary
